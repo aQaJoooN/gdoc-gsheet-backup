@@ -27,6 +27,19 @@ go.work.sum
 # env file
 .env
 
+# Config and credentials
+config.yaml
+credentials.json
+token.json
+
+# Backups
+backups/
+
 # Editor/IDE
 # .idea/
 # .vscode/
+
+# credential files
+cookies.txt
+credentials.json
+token.json
