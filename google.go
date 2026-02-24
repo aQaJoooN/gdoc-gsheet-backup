@@ -170,6 +170,34 @@ func (g *GoogleClient) ExportDoc(url, format string) ([]byte, error) {
 	return io.ReadAll(resp.Body)
 }
 
+// DownloadDriveFile downloads any file from Google Drive by URL
+func (g *GoogleClient) DownloadDriveFile(url string) ([]byte, string, error) {
+	id, err := extractID(url)
+	if err != nil {
+		return nil, "", err
+	}
+
+	// Get file metadata to determine the filename
+	file, err := g.driveService.Files.Get(id).Fields("name, mimeType").Do()
+	if err != nil {
+		return nil, "", fmt.Errorf("unable to get file metadata: %w", err)
+	}
+
+	// Download the file
+	resp, err := g.driveService.Files.Get(id).Download()
+	if err != nil {
+		return nil, "", fmt.Errorf("unable to download file: %w", err)
+	}
+	defer resp.Body.Close()
+
+	data, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, "", err
+	}
+
+	return data, file.Name, nil
+}
+
 func (g *GoogleClient) exportDocAsHTML(id string) ([]byte, error) {
 	resp, err := g.driveService.Files.Export(id, "text/html").Download()
 	if err != nil {

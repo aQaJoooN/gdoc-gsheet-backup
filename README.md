@@ -1,6 +1,6 @@
 # Google Docs & Sheets Backup Tool
 
-CLI tool to backup Google Docs and Sheets with OAuth authentication.
+Automated CLI tool to backup Google Docs, Sheets, and Drive files with OAuth/Service Account authentication and Git integration.
 
 [![Auto Release](https://github.com/aQaJoooN/gdoc-gsheet-backup/actions/workflows/release.yml/badge.svg)](https://github.com/aQaJoooN/gdoc-gsheet-backup/actions/workflows/release.yml)
 [![Test](https://github.com/aQaJoooN/gdoc-gsheet-backup/actions/workflows/test.yml/badge.svg)](https://github.com/aQaJoooN/gdoc-gsheet-backup/actions/workflows/test.yml)
@@ -9,11 +9,14 @@ CLI tool to backup Google Docs and Sheets with OAuth authentication.
 
 - ✅ Backup Google Sheets (xlsx, csv, pdf, ods, html)
 - ✅ Backup Google Docs (docx, pdf, txt, html, md)
+- ✅ Download Google Drive files (any file type: PDFs, images, videos, etc.)
 - ✅ OAuth or Service Account authentication
 - ✅ Local or Git repository storage
 - ✅ Auto-generated README.md with backup inventory
-- ✅ Azure DevOps on-premise support
+- ✅ Azure DevOps on-premise support with PAT authentication
+- ✅ GitHub integration with Personal Access Token
 - ✅ Multi-platform binaries (Linux, macOS, Windows)
+- ✅ Automated CI/CD with GitHub Actions
 
 ## Quick Start
 
@@ -92,6 +95,12 @@ google_docs:
     export_format: "docx"
     name: "my-document"
 
+google_drive_files:
+  - url: "https://drive.google.com/file/d/YOUR_FILE_ID/view"
+    name: "presentation.pdf"
+  - url: "https://drive.google.com/file/d/ANOTHER_FILE_ID/view"
+    name: "diagram.png"
+
 backup:
   type: "git"  # or "local"
   local_path: "./backups"
@@ -107,7 +116,8 @@ backup:
 ## Export Formats
 
 **Sheets:** xlsx, csv, pdf, ods, html  
-**Docs:** docx, pdf, txt, html, md
+**Docs:** docx, pdf, txt, html, md  
+**Drive Files:** Any file type (original format preserved)
 
 ## Important Note About Markdown Export
 
@@ -119,27 +129,85 @@ backup:
 - Use `docx` format (preserves all formatting)
 - Use `html` format (preserves tables)
 
-## Azure DevOps Support
+## Google Drive Files Download
 
-The tool supports Azure DevOps on-premise with Personal Access Token authentication:
+Download any file type from Google Drive (PDFs, images, videos, presentations, etc.):
 
+```yaml
+google_drive_files:
+  - url: "https://drive.google.com/file/d/YOUR_FILE_ID/view"
+    name: "my-file.pdf"  # Custom filename
+  
+  - url: "https://drive.google.com/file/d/ANOTHER_FILE_ID/view"
+    name: "image.png"
+```
+
+The tool will download files in their original format and save them with the specified name (or original filename if not specified).
+
+## Git Integration
+
+### GitHub
+```yaml
+backup:
+  type: "git"
+  git:
+    repository: "https://github.com/username/backup-repo.git"
+    branch: "main"
+    credentials:
+      username: "your-username"
+      token: "ghp_your_personal_access_token"
+```
+
+### Azure DevOps (On-Premise)
 ```yaml
 backup:
   type: "git"
   git:
     repository: "https://your-azure-devops.com/tfs/Project/_git/repo"
+    branch: "main"
     credentials:
       username: "your-username"
       token: "your-pat-token"
 ```
 
+The tool uses Base64-encoded PAT authentication for Azure DevOps compatibility.
+
 ## Auto-Generated README
 
-When using git backup, the tool automatically generates a `README.md` in your repository with:
-- List of all backed up files
-- Links to source Google Docs/Sheets
+When using git backup, the tool automatically generates a `README.md` in your backup repository with:
+- List of all backed up Sheets, Docs, and Drive files
+- Links to source Google Docs/Sheets/Drive
+- File formats and sizes
 - Backup timestamp
 - Summary statistics
+
+Example generated README structure:
+```
+# Google Docs & Sheets Backup
+
+Last backup: 2026-02-24 10:30:00
+
+## 📊 Google Sheets
+| File Name | Format | Source URL |
+|-----------|--------|------------|
+| spreadsheet.xlsx | xlsx | [Open in Google Sheets](...) |
+
+## 📝 Google Docs
+| File Name | Format | Source URL |
+|-----------|--------|------------|
+| document.docx | docx | [Open in Google Docs](...) |
+
+## 📁 Google Drive Files
+| File Name | Source URL |
+|-----------|------------|
+| presentation.pdf | [Open in Google Drive](...) |
+
+## 📋 Backup Summary
+- Total Sheets: 1
+- Total Docs: 1
+- Total Drive Files: 1
+- Total Files: 3
+```
 
 ## Development
 

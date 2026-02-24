@@ -7,10 +7,11 @@ import (
 )
 
 type Config struct {
-	GoogleAccount GoogleAccount `yaml:"google_account"`
-	GoogleSheets  []GoogleSheet `yaml:"google_sheets"`
-	GoogleDocs    []GoogleDoc   `yaml:"google_docs"`
-	Backup        BackupConfig  `yaml:"backup"`
+	GoogleAccount    GoogleAccount     `yaml:"google_account"`
+	GoogleSheets     []GoogleSheet     `yaml:"google_sheets"`
+	GoogleDocs       []GoogleDoc       `yaml:"google_docs"`
+	GoogleDriveFiles []GoogleDriveFile `yaml:"google_drive_files"`
+	Backup           BackupConfig      `yaml:"backup"`
 }
 
 type GoogleAccount struct {
@@ -28,6 +29,11 @@ type GoogleDoc struct {
 	URL          string `yaml:"url"`
 	ExportFormat string `yaml:"export_format"`
 	Name         string `yaml:"name"`
+}
+
+type GoogleDriveFile struct {
+	URL  string `yaml:"url"`
+	Name string `yaml:"name"`
 }
 
 type BackupConfig struct {
