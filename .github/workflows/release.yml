@@ -40,24 +40,24 @@ jobs:
           go mod download
           
           # Linux AMD64
-          GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o gdocs-backup-linux-amd64
+          GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o gdoc-gsheet-backup-linux-amd64
           
           # Linux ARM64
-          GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o gdocs-backup-linux-arm64
+          GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o gdoc-gsheet-backup-linux-arm64
           
           # macOS AMD64
-          GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o gdocs-backup-darwin-amd64
+          GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o gdoc-gsheet-backup-darwin-amd64
           
           # macOS ARM64 (Apple Silicon)
-          GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o gdocs-backup-darwin-arm64
+          GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o gdoc-gsheet-backup-darwin-arm64
           
           # Windows AMD64
-          GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o gdocs-backup-windows-amd64.exe
+          GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o gdoc-gsheet-backup-windows-amd64.exe
 
       - name: Create checksums
         if: steps.tag_version.outputs.new_tag
         run: |
-          sha256sum gdocs-backup-* > checksums.txt
+          sha256sum gdoc-gsheet-backup-* > checksums.txt
 
       - name: Create Release
         if: steps.tag_version.outputs.new_tag
@@ -67,11 +67,11 @@ jobs:
           name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
           files: |
-            gdocs-backup-linux-amd64
-            gdocs-backup-linux-arm64
-            gdocs-backup-darwin-amd64
-            gdocs-backup-darwin-arm64
-            gdocs-backup-windows-amd64.exe
+            gdoc-gsheet-backup-linux-amd64
+            gdoc-gsheet-backup-linux-arm64
+            gdoc-gsheet-backup-darwin-amd64
+            gdoc-gsheet-backup-darwin-arm64
+            gdoc-gsheet-backup-windows-amd64.exe
             checksums.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

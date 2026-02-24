@@ -2,8 +2,8 @@
 
 CLI tool to backup Google Docs and Sheets with OAuth authentication.
 
-[![Auto Release](https://github.com/YOUR_USERNAME/gdocs-backup/actions/workflows/release.yml/badge.svg)](https://github.com/YOUR_USERNAME/gdocs-backup/actions/workflows/release.yml)
-[![Test](https://github.com/YOUR_USERNAME/gdocs-backup/actions/workflows/test.yml/badge.svg)](https://github.com/YOUR_USERNAME/gdocs-backup/actions/workflows/test.yml)
+[![Auto Release](https://github.com/aQaJoooN/gdoc-gsheet-backup/actions/workflows/release.yml/badge.svg)](https://github.com/aQaJoooN/gdoc-gsheet-backup/actions/workflows/release.yml)
+[![Test](https://github.com/aQaJoooN/gdoc-gsheet-backup/actions/workflows/test.yml/badge.svg)](https://github.com/aQaJoooN/gdoc-gsheet-backup/actions/workflows/test.yml)
 
 ## Features
 
@@ -19,26 +19,26 @@ CLI tool to backup Google Docs and Sheets with OAuth authentication.
 
 ### Download Pre-built Binary
 
-Download the latest release for your platform from the [Releases page](https://github.com/YOUR_USERNAME/gdocs-backup/releases).
+Download the latest release for your platform from the [Releases page](https://github.com/aQaJoooN/gdoc-gsheet-backup/releases).
 
 **Linux:**
 ```bash
-wget https://github.com/YOUR_USERNAME/gdocs-backup/releases/latest/download/gdocs-backup-linux-amd64
-chmod +x gdocs-backup-linux-amd64
-./gdocs-backup-linux-amd64 config.yaml
+wget https://github.com/aQaJoooN/gdoc-gsheet-backup/releases/latest/download/gdoc-gsheet-backup-linux-amd64
+chmod +x gdoc-gsheet-backup-linux-amd64
+./gdoc-gsheet-backup-linux-amd64 config.yaml
 ```
 
 **macOS:**
 ```bash
-wget https://github.com/YOUR_USERNAME/gdocs-backup/releases/latest/download/gdocs-backup-darwin-arm64
-chmod +x gdocs-backup-darwin-arm64
-./gdocs-backup-darwin-arm64 config.yaml
+wget https://github.com/aQaJoooN/gdoc-gsheet-backup/releases/latest/download/gdoc-gsheet-backup-darwin-arm64
+chmod +x gdoc-gsheet-backup-darwin-arm64
+./gdoc-gsheet-backup-darwin-arm64 config.yaml
 ```
 
 **Windows:**
-Download `gdocs-backup-windows-amd64.exe` and run:
+Download `gdoc-gsheet-backup-windows-amd64.exe` and run:
 ```cmd
-gdocs-backup-windows-amd64.exe config.yaml
+gdoc-gsheet-backup-windows-amd64.exe config.yaml
 ```
 
 ### Build from Source
@@ -47,10 +47,10 @@ gdocs-backup-windows-amd64.exe config.yaml
 
 2. **Clone and build:**
 ```bash
-git clone https://github.com/YOUR_USERNAME/gdocs-backup.git
-cd gdocs-backup
+git clone https://github.com/aQaJoooN/gdoc-gsheet-backup.git
+cd gdoc-gsheet-backup
 go mod download
-go build -o gdocs-backup
+go build -o gdoc-gsheet-backup
 ```
 
 ## Setup
@@ -70,7 +70,7 @@ cp config.example.yaml config.yaml
 
 4. **Run:**
 ```bash
-./gdocs-backup config.yaml
+./gdoc-gsheet-backup config.yaml
 ```
 
 ## Configuration
@@ -151,13 +151,13 @@ go test ./...
 ### Building for Multiple Platforms
 ```bash
 # Linux
-GOOS=linux GOARCH=amd64 go build -o gdocs-backup-linux-amd64
+GOOS=linux GOARCH=amd64 go build -o gdoc-gsheet-backup-linux-amd64
 
 # macOS
-GOOS=darwin GOARCH=arm64 go build -o gdocs-backup-darwin-arm64
+GOOS=darwin GOARCH=arm64 go build -o gdoc-gsheet-backup-darwin-arm64
 
 # Windows
-GOOS=windows GOARCH=amd64 go build -o gdocs-backup-windows-amd64.exe
+GOOS=windows GOARCH=amd64 go build -o gdoc-gsheet-backup-windows-amd64.exe
 ```
 
 ## Releasing
