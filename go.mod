@@ -3,6 +3,7 @@ module gdocs-backup
 go 1.21
 
 require (
+	github.com/JohannesKaufmann/html-to-markdown v1.4.2
 	golang.org/x/oauth2 v0.16.0
 	google.golang.org/api v0.162.0
 	gopkg.in/yaml.v3 v3.0.1
@@ -11,6 +12,8 @@ require (
 require (
 	cloud.google.com/go/compute v1.23.3 // indirect
 	cloud.google.com/go/compute/metadata v0.2.3 // indirect
+	github.com/PuerkitoBio/goquery v1.8.1 // indirect
+	github.com/andybalholm/cascadia v1.3.1 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/go-logr/logr v1.4.1 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect

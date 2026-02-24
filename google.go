@@ -9,6 +9,7 @@ import (
 	"os"
 	"regexp"
 
+	md "github.com/JohannesKaufmann/html-to-markdown"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/drive/v3"
@@ -211,6 +212,20 @@ func getDocMimeType(format string) string {
 }
 
 func htmlToMarkdown(htmlData []byte) []byte {
+	converter := md.NewConverter("", true, nil)
+	
+	// Don't keep HTML - convert everything to markdown
+	markdown, err := converter.ConvertString(string(htmlData))
+	if err != nil {
+		// Fallback to basic conversion if error
+		return basicHtmlToMarkdown(htmlData)
+	}
+	
+	return []byte(markdown)
+}
+
+// Fallback basic converter
+func basicHtmlToMarkdown(htmlData []byte) []byte {
 	html := string(htmlData)
 	
 	// Remove HTML header and style tags
