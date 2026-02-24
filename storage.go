@@ -103,7 +103,7 @@ func (s *GitStorage) Commit(timestamp time.Time) error {
 func (s *GitStorage) initRepo() error {
 	if s.config.Git.Repository != "" {
 		fmt.Println("Cloning repository...")
-		
+
 		// Create Base64 encoded PAT for Azure DevOps
 		pat := fmt.Sprintf(":%s", s.config.Git.Credentials.Token)
 		b64Pat := base64.StdEncoding.EncodeToString([]byte(pat))
@@ -115,11 +115,11 @@ func (s *GitStorage) initRepo() error {
 		}
 
 		// Clone with authentication header
-		cmd := exec.Command("git", "-c", fmt.Sprintf("http.extraHeader=%s", authHeader), 
+		cmd := exec.Command("git", "-c", fmt.Sprintf("http.extraHeader=%s", authHeader),
 			"clone", "--single-branch", "--branch", branch, s.config.Git.Repository, s.path)
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
-		
+
 		if err := cmd.Run(); err != nil {
 			fmt.Println("Clone failed, initializing new repository...")
 			return s.initNewRepo()
@@ -148,7 +148,7 @@ func (s *GitStorage) initNewRepo() error {
 	if branch == "" {
 		branch = "main"
 	}
-	
+
 	if err := s.runGit("checkout", "-b", branch); err != nil {
 		s.runGit("checkout", branch)
 	}
@@ -167,20 +167,20 @@ func (s *GitStorage) push() error {
 	if creds.Token != "" {
 		// Set git config for this repo
 		s.runGit("config", "credential.helper", "store")
-		
+
 		// Try different authentication formats for Azure DevOps
 		// Format 1: username:token@
 		repoURL1 := s.getAuthenticatedURLWithUsername()
 		if err := s.runGit("push", repoURL1, branch); err == nil {
 			return nil
 		}
-		
+
 		// Format 2: token only (PAT as username)
 		repoURL2 := s.getAuthenticatedURL()
 		if err := s.runGit("push", repoURL2, branch); err == nil {
 			return nil
 		}
-		
+
 		// Format 3: Use git credential helper
 		return s.pushWithCredentialHelper(branch)
 	}
@@ -193,21 +193,21 @@ func (s *GitStorage) pushWithCredentialHelper(branch string) error {
 	// Configure credential helper for Azure DevOps
 	repo := s.config.Git.Repository
 	creds := s.config.Git.Credentials
-	
+
 	// Set up credential helper
 	s.runGit("config", "credential.helper", "")
 	s.runGit("config", "--local", "credential.helper", "store")
-	
+
 	// Create credential file
 	credFile := filepath.Join(s.path, ".git", "credentials")
-	credContent := fmt.Sprintf("https://%s:%s@%s\n", 
-		creds.Username, 
-		creds.Token, 
+	credContent := fmt.Sprintf("https://%s:%s@%s\n",
+		creds.Username,
+		creds.Token,
 		strings.TrimPrefix(strings.TrimPrefix(repo, "https://"), "http://"))
-	
+
 	os.WriteFile(credFile, []byte(credContent), 0600)
 	s.runGit("config", "--local", "credential.helper", fmt.Sprintf("store --file=%s", credFile))
-	
+
 	return s.runGit("push", "origin", branch)
 }
 
@@ -234,7 +234,7 @@ func (s *GitStorage) getAuthenticatedURL() string {
 			// For Azure DevOps, the format is: https://PAT@server/path
 			// Remove https:// prefix
 			repoWithoutProtocol := strings.TrimPrefix(repo, "https://")
-			
+
 			// Azure DevOps uses PAT as username with empty password
 			// Format: https://PAT@azure.asax.ir/...
 			return fmt.Sprintf("https://%s@%s", creds.Token, repoWithoutProtocol)

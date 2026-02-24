@@ -23,7 +23,7 @@ type GoogleClient struct {
 
 func NewGoogleClient(account GoogleAccount) (*GoogleClient, error) {
 	ctx := context.Background()
-	
+
 	b, err := os.ReadFile(account.CredentialsFile)
 	if err != nil {
 		return nil, fmt.Errorf("unable to read credentials file: %w", err)
@@ -134,7 +134,7 @@ func (g *GoogleClient) ExportSheet(url, format string) ([]byte, error) {
 	}
 
 	mimeType := getSheetMimeType(format)
-	
+
 	resp, err := g.driveService.Files.Export(id, mimeType).Download()
 	if err != nil {
 		return nil, fmt.Errorf("unable to export sheet: %w", err)
@@ -160,7 +160,7 @@ func (g *GoogleClient) ExportDoc(url, format string) ([]byte, error) {
 	}
 
 	mimeType := getDocMimeType(format)
-	
+
 	resp, err := g.driveService.Files.Export(id, mimeType).Download()
 	if err != nil {
 		return nil, fmt.Errorf("unable to export doc: %w", err)
@@ -213,26 +213,26 @@ func getDocMimeType(format string) string {
 
 func htmlToMarkdown(htmlData []byte) []byte {
 	converter := md.NewConverter("", true, nil)
-	
+
 	// Don't keep HTML - convert everything to markdown
 	markdown, err := converter.ConvertString(string(htmlData))
 	if err != nil {
 		// Fallback to basic conversion if error
 		return basicHtmlToMarkdown(htmlData)
 	}
-	
+
 	return []byte(markdown)
 }
 
 // Fallback basic converter
 func basicHtmlToMarkdown(htmlData []byte) []byte {
 	html := string(htmlData)
-	
+
 	// Remove HTML header and style tags
 	html = regexp.MustCompile(`(?s)<head>.*?</head>`).ReplaceAllString(html, "")
 	html = regexp.MustCompile(`(?s)<style[^>]*>.*?</style>`).ReplaceAllString(html, "")
 	html = regexp.MustCompile(`(?s)<script[^>]*>.*?</script>`).ReplaceAllString(html, "")
-	
+
 	// Convert headings
 	html = regexp.MustCompile(`(?s)<h1[^>]*>(.*?)</h1>`).ReplaceAllString(html, "# $1\n\n")
 	html = regexp.MustCompile(`(?s)<h2[^>]*>(.*?)</h2>`).ReplaceAllString(html, "## $1\n\n")
@@ -240,36 +240,36 @@ func basicHtmlToMarkdown(htmlData []byte) []byte {
 	html = regexp.MustCompile(`(?s)<h4[^>]*>(.*?)</h4>`).ReplaceAllString(html, "#### $1\n\n")
 	html = regexp.MustCompile(`(?s)<h5[^>]*>(.*?)</h5>`).ReplaceAllString(html, "##### $1\n\n")
 	html = regexp.MustCompile(`(?s)<h6[^>]*>(.*?)</h6>`).ReplaceAllString(html, "###### $1\n\n")
-	
+
 	// Convert bold and italic
 	html = regexp.MustCompile(`(?s)<strong[^>]*>(.*?)</strong>`).ReplaceAllString(html, "**$1**")
 	html = regexp.MustCompile(`(?s)<b[^>]*>(.*?)</b>`).ReplaceAllString(html, "**$1**")
 	html = regexp.MustCompile(`(?s)<em[^>]*>(.*?)</em>`).ReplaceAllString(html, "*$1*")
 	html = regexp.MustCompile(`(?s)<i[^>]*>(.*?)</i>`).ReplaceAllString(html, "*$1*")
-	
+
 	// Convert links
 	html = regexp.MustCompile(`(?s)<a[^>]*href="([^"]*)"[^>]*>(.*?)</a>`).ReplaceAllString(html, "[$2]($1)")
-	
+
 	// Convert lists
 	html = regexp.MustCompile(`(?s)<li[^>]*>(.*?)</li>`).ReplaceAllString(html, "- $1\n")
 	html = regexp.MustCompile(`<ul[^>]*>`).ReplaceAllString(html, "\n")
 	html = regexp.MustCompile(`</ul>`).ReplaceAllString(html, "\n")
 	html = regexp.MustCompile(`<ol[^>]*>`).ReplaceAllString(html, "\n")
 	html = regexp.MustCompile(`</ol>`).ReplaceAllString(html, "\n")
-	
+
 	// Convert paragraphs
 	html = regexp.MustCompile(`(?s)<p[^>]*>(.*?)</p>`).ReplaceAllString(html, "$1\n\n")
-	
+
 	// Convert line breaks
 	html = regexp.MustCompile(`<br[^>]*>`).ReplaceAllString(html, "\n")
-	
+
 	// Convert code
 	html = regexp.MustCompile(`(?s)<pre[^>]*>(.*?)</pre>`).ReplaceAllString(html, "```\n$1\n```\n")
 	html = regexp.MustCompile(`(?s)<code[^>]*>(.*?)</code>`).ReplaceAllString(html, "`$1`")
-	
+
 	// Remove remaining HTML tags
 	html = regexp.MustCompile(`<[^>]+>`).ReplaceAllString(html, "")
-	
+
 	// Decode HTML entities
 	replacements := map[string]string{
 		"&nbsp;":  " ",
@@ -284,10 +284,10 @@ func basicHtmlToMarkdown(htmlData []byte) []byte {
 	for old, new := range replacements {
 		html = regexp.MustCompile(old).ReplaceAllString(html, new)
 	}
-	
+
 	// Clean up multiple newlines
 	html = regexp.MustCompile(`\n{3,}`).ReplaceAllString(html, "\n\n")
 	html = regexp.MustCompile(` {2,}`).ReplaceAllString(html, " ")
-	
+
 	return []byte(html)
 }

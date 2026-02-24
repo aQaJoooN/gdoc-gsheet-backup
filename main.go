@@ -14,14 +14,14 @@ func main() {
 	}
 
 	configPath := os.Args[1]
-	
+
 	config, err := LoadConfig(configPath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
 
 	app := NewApp(config)
-	
+
 	if err := app.Run(); err != nil {
 		log.Fatalf("Backup failed: %v", err)
 	}
